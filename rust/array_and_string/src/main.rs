@@ -1,10 +1,20 @@
+use std::env;
+use std::collections::HashMap;
+
 mod solution;
 
 fn main() {
-    let nums= vec![1, 2, 3];
-    println!("{}", solution::Solution::pivot_index(nums));
-    let nums= vec![1,7,3,6,5,6];
-    println!("{}", solution::Solution::pivot_index(nums));
-    let nums= vec![2,1,-1];
-    println!("{}", solution::Solution::pivot_index(nums));
+    let args: Vec<String> = env::args().collect();
+    if args.len() != 2 {
+        println!("Usage: cargo run <method_name>");
+        std::process::exit(0);
+    }
+    let method = &args[1];
+    let mut methods: HashMap<String, fn()> = HashMap::new();
+    methods.insert(String::from("pivot_index"), solution::test_pivot_index);
+    methods.insert(String::from("dominant_index"), solution::test_dominant_index);
+    match methods.get(method) {
+        Some(value) => value(),
+        None => println!("Method not found")
+    }
 }
